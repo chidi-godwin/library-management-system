@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework_simplejwt',
     'users.apps.UsersConfig',
-    'auth.apps.AuthConfig',
 ]
 
 MIDDLEWARE = [
@@ -159,4 +158,15 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'https://google.com',
+    'ACTIVATION_URL': 'https://google.com',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    'TOKEN_MODEL': True,
+    'SERIALIZERS': {
+    }
 }
