@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import dj_database_url
 import os
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-9=x$u@86*0f4*t)=41co7ubeo$8bv+^q5tcc^2u@=f3vl&@1uz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -130,8 +131,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-USER_URL= 'users/'
-AUTH_URL= 'auth/'
+USER_URL = 'users/'
+AUTH_URL = 'auth/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -145,7 +146,6 @@ REST_FRAMEWORK = {
 }
 
 # Simple JWT settings
-from datetime import timedelta
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
