@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework_simplejwt',
+    'django_filters',
     'users.apps.UsersConfig',
     'Auth.apps.AuthConfig',
     'books.apps.BooksConfig',
@@ -147,6 +148,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
 
 # Simple JWT settings
