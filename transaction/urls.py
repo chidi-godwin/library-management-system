@@ -1,7 +1,12 @@
 from django.urls import path
-from .views import CartItemListCreate
+from .views import CartItemCreate, CartItemRetrieveDelete, CartDetail
+from rest_framework.urlpatterns import format_suffix_patterns
 
+app_name = 'transaction'
 
-urlpatterns = [
-  path('cart_item', CartItemListCreate.as_view(), name='cart_item')
-]
+urlpatterns = format_suffix_patterns([
+    path('cart_item/', CartItemCreate.as_view(), name='cart_item'),
+    path('cart_item/<int:pk>/', CartItemRetrieveDelete.as_view(), name='cart_item_delete'),
+    path('cart/', CartDetail.as_view(), name='cart-detail'),
+    # path('checkout/', )
+])
