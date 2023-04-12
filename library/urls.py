@@ -16,13 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from .views import api_root
 
 urlpatterns = [
+    path('', api_root, name='index'),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
+    path('auth/', include('rest_framework.urls')),
     path('auth/', include('Auth.urls')),
     path('books/', include('books.urls')),
-    path('transactions', include('transaction.urls'))
+    path('transactions/', include('transaction.urls'))
 ]
 
 urlpatterns += staticfiles_urlpatterns()
