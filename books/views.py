@@ -13,9 +13,9 @@ from .filters import BookFilter
 def index(request, format=None):
   return Response({
     'list or create books': reverse('books:book-list', request=request, format=format),
-    'update, retrieve or delete book detials': reverse('books:book-detail', request=request, format=format),
+    'update, retrieve or delete book detials': reverse('books:book-detail', kwargs={'pk': 1}, request=request, format=format),
     'list or create categories': reverse('books:category-list', request=request, format=format),
-    'update, retrieve or delete category detials': reverse('books:category_detail', request=request, format=format)
+    'update, retrieve or delete category detials': reverse('books:category-detail', kwargs={'pk': 1}, request=request, format=format)
   })
 
 class BookListCreateView(generics.ListCreateAPIView):
