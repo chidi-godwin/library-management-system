@@ -3,7 +3,7 @@ from books.models import Book
 
 
 class Cart(models.Model):
-  user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name='user_cart')
+  user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name='cart')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   
@@ -16,6 +16,9 @@ class CartItem(models.Model):
   book = models.ForeignKey(Book, on_delete=models.CASCADE)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+  
+  class Meta:
+    unique_together = ('cart', 'book')
   
   
 class Transaction(models.Model):
