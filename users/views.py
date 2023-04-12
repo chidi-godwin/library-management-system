@@ -9,7 +9,7 @@ from .permissions import IsOwner
 from transaction.models import Cart
 
 @api_view(['GET'])
-def api_root(request, format=None):
+def index(request, format=None):
   return Response({
     'signup': reverse('users:signup', request=request, format=format),
     'update, retrieve or delete user detials': reverse('users:user-update', request=request, format=format),
