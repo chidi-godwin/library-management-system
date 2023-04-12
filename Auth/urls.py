@@ -6,7 +6,7 @@ app_name = 'Auth'
 
 urlpatterns = [
   path('index/', index, name='index'),
-  path('login/', views.TokenObtainPairView.as_view(), name='login'),
+  path('signin/', views.TokenObtainPairView.as_view(), name='login'),
   path('refresh/', views.TokenRefreshView.as_view(), name='refresh'),
   path('verify/', views.TokenVerifyView.as_view(), name="verify"),
   path('', include('djoser.urls')),
