@@ -13,7 +13,7 @@ def index(request, format=None):
   return Response({
     'signup': reverse('users:signup', request=request, format=format),
     'update, retrieve or delete user detials': reverse('users:user-update', request=request, format=format),
-    'make user admin': reverse('users:admin-update', request=request, format=format),
+    'make user admin': reverse('users:admin-update', kwargs={'pk': 1}, request=request, format=format),
     'change user password': reverse('users:password-update', request=request, format=format)
   })
 
