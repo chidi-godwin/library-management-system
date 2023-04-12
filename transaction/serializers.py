@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
-from .models import CartItem, Cart
+from .models import CartItem, Cart, TransactionItem, Transaction
 from books.models import Book
 from books.serializers import BookRetrieveSerializer
 
@@ -44,3 +43,23 @@ class CartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = ['id', 'user_id', 'items']
+
+
+class TransactionItemSerializer(serializers.ModelSerializer):
+    book = serializers.PrimaryKeyRelatedField(queryset=Book.objects.all())
+
+    class Meta:
+        model = TransactionItem
+        fields = ['id', 'book', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'created_at', 'updated_at']
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    items = TransactionItemSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'status', 'comments', 'total',
+                  'user', 'created_at', 'updated_at', 'items']
+        read_only_fields = ['id', 'status', 'comments',
+                            'total', 'user', 'created_at', 'updated_at', 'items']

@@ -1,7 +1,10 @@
+from django.db import transaction
+from rest_framework import status
+from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
-from .models import CartItem, Cart
-from .serializers import CartItemSerializer, CartSerializer
+from .models import CartItem, TransactionItem, Transaction
+from .serializers import CartItemSerializer, CartSerializer, TransactionSerializer
 from .permissions import IsCartOwner, IsCartItemOwner
 
 
@@ -30,5 +33,26 @@ class CartDetail(RetrieveAPIView):
     return self.request.user.cart
   
 
-class Transaction(CreateAPIView):
-  pass
+class TransactionCreate(CreateAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+        cart_items = CartItem.objects.filter(cart=user.cart)
+        total = 0
+        for cart_item in cart_items:
+            total += cart_item.book.price
+        with transaction.atomic():
+            transaction_instance = Transaction.objects.create(user=user, total=total)
+            transaction_items = []
+            for cart_item in cart_items:
+                transaction_item = TransactionItem(transaction=transaction_instance, book=cart_item.book)
+                transaction_items.append(transaction_item)
+            TransactionItem.objects.bulk_create(transaction_items)
+            
+            # clear the user's cart
+            request.user.cart.items.all().delete()
+
+        serializer = self.serializer_class(transaction_instance, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
