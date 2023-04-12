@@ -20,10 +20,10 @@ from .views import api_root
 
 urlpatterns = [
     path('', api_root, name='index'),
+    path('auth/', include('Auth.urls')),
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('auth/', include('rest_framework.urls')),
-    path('auth/', include('Auth.urls')),
     path('books/', include('books.urls')),
     path('transactions/', include('transaction.urls'))
 ]
