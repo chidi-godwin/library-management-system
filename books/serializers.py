@@ -1,23 +1,17 @@
 from rest_framework import serializers
-from .models import Book, Category, Author
+from .models import Book, Category
 
 
 class BookSerializer(serializers.ModelSerializer):
-    author_id = serializers.PrimaryKeyRelatedField(
-        queryset=Author.objects.all(), many=True)
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(),
+        required=True,
+        source='category'
+    )
 
     class Meta:
         model = Book
-        fields = ('id', 'title', 'price', 'category_id',
-                  'author_id', 'quantity')
-
-
-class AuthorSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Author
-        fields = ('id', 'name', 'books')
+        fields = ['title', 'price', 'quantity', 'category_id']
 
 
 class CategorySerializer(serializers.ModelSerializer):
