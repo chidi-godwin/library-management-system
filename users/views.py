@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from .models import User
-from .serializers import UserSerializer, UserUpdateSerializer, AdminUserUpdate, UserPasswordUpdate
+from .serializers import UserSerializer, UserUpdateSerializer, AdminUserUpdate, UserPasswordUpdateSerializer
 from .permissions import IsOwner
 from transaction.models import Cart
 
@@ -48,7 +48,7 @@ class AdminUserUpdate(generics.UpdateAPIView):
   
 class UserPasswordUpdate(generics.UpdateAPIView):
   queryset = User.objects.all()
-  serializer_class = UserPasswordUpdate
+  serializer_class = UserPasswordUpdateSerializer
   permission_classes = [IsAuthenticated, IsOwner]
   
   def get_object(self):

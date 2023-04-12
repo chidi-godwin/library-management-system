@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from .models import User
 from django.contrib.auth.password_validation import validate_password
 from transaction.models import Cart
@@ -45,9 +46,9 @@ class UserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name',
+        fields = ['id', 'email', 'first_name', 'last_name',
                   'phone_number', 'dob', 'is_staff', 'cart_id']
-        read_only_fields = ['id', 'cart_id', 'is_staff']
+        read_only_fields = ['id', 'cart_id', 'is_staff', 'email']
         extra_kwargs = {
             'first_name': {'required': False},
             'last_name': {'required': False},
@@ -67,7 +68,7 @@ class AdminUserUpdate(serializers.ModelSerializer):
                             'phone_number', 'dob', 'cart_id')
 
 
-class UserPasswordUpdate(serializers.ModelSerializer):
+class UserPasswordUpdateSerializer(serializers.ModelSerializer):
     current_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
@@ -83,9 +84,22 @@ class UserPasswordUpdate(serializers.ModelSerializer):
                             'phone_number', 'dob', 'cart_id')
 
     def validate(self, attrs):
-        if attrs['new_password'] != attrs['new_password_confirm']:
-            raise serializers.ValidationError(
-                {"password": "Password fields didn't match."})
+        current_password = attrs.get('current_password')
+        new_password = attrs.get('new_password')
+        new_password_confirm = attrs.get('new_password_confirm')
+
+        if not all([current_password, new_password, new_password_confirm]):
+            raise ValidationError(
+                {'message': 'current_password, new_password, and new_password_confirm are all required fields and should be present in the input.'})
+
+        if new_password != new_password_confirm:
+            raise ValidationError(
+                {'message': 'new_password and new_password_confirm fields must match.'})
+
+        if any([key not in ['current_password', 'new_password', 'new_password_confirm'] for key in attrs.keys()]):
+            raise ValidationError(
+                {'message': 'Only current_password, new_password, and new_password_confirm fields are allowed.'})
+
         return attrs
 
     def validate_current_password(self, value):
