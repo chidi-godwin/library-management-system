@@ -1,10 +1,10 @@
 from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import CartItem, TransactionItem, Transaction
-from .serializers import CartItemSerializer, CartSerializer, TransactionSerializer
+from .serializers import CartItemSerializer, CartSerializer, TransactionSerializer, TransactionApproveSerializer
 from .permissions import IsCartOwner, IsCartItemOwner
 
 
@@ -61,3 +61,9 @@ class TransactionList(ListAPIView):
   queryset = Transaction.objects.all()
   permission_classes = [IsAuthenticated, IsAdminUser]
   serializer_class = TransactionSerializer
+  
+
+class TransactionUpdate(UpdateAPIView):
+  queryset = Transaction.objects.all()
+  permission_classes = [IsAuthenticated, IsAdminUser]
+  serializer_class = TransactionApproveSerializer

@@ -63,3 +63,15 @@ class TransactionSerializer(serializers.ModelSerializer):
                   'user', 'created_at', 'updated_at', 'items']
         read_only_fields = ['id', 'status', 'comments',
                             'total', 'user', 'created_at', 'updated_at', 'items']
+
+
+class TransactionApproveSerializer(serializers.ModelSerializer):
+    status = serializers.ChoiceField(choices=Transaction.STATUS, required=True)
+    comments = serializers.CharField(required=False)
+
+    class Meta:
+        model = Transaction
+        fields = ['id', 'status', 'comments', 'total',
+                  'user', 'created_at', 'updated_at', 'items']
+        read_only_fields = ['id', 'total', 'user',
+                            'created_at', 'updated_at', 'items']
