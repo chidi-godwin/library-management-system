@@ -1,12 +1,14 @@
 from django.db import models
-from users.models import User
 from books.models import Book
 
 
 class Cart(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  user = models.OneToOneField('users.User', on_delete=models.CASCADE, related_name='user_cart')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
+  
+  def __str__(self) -> str:
+    return f'Cart: {self.user.first_name} {self.user.last_name}'
   
 
 class CartItem(models.Model):
@@ -26,7 +28,7 @@ class Transaction(models.Model):
   status = models.CharField(max_length=10, choices=STATUS, default='pending')
   comments = models.TextField()
   total = models.DecimalField(max_digits=15, decimal_places=2)
-  user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='transactions')
+  user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name='transactions')
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   

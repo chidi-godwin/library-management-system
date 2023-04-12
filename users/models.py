@@ -26,6 +26,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     dob = models.DateField()
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    cart = models.OneToOneField('transaction.Cart', on_delete=models.CASCADE, related_name='cart_user')
 
     objects = UserManager()
 
