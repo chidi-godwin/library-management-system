@@ -18,7 +18,7 @@ def index(request, format=None):
   })
 
 class SignUp(generics.CreateAPIView):
-  queryset = User
+  queryset = User.objects.all()
   serializer_class = UserSerializer
   
   def perform_create(self, serializer):
@@ -33,7 +33,7 @@ class SignUp(generics.CreateAPIView):
     
 
 class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-  queryset = User
+  queryset = User.objects.all()
   serializer_class = UserUpdateSerializer
   permission_classes = [IsAuthenticated, IsOwner]
   
@@ -41,13 +41,13 @@ class UserRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     return self.request.user
   
 class AdminUserUpdate(generics.UpdateAPIView):
-  queryset = User
+  queryset = User.objects.all()
   serializer_class = AdminUserUpdate
   permission_classes = [IsAuthenticated, IsAdminUser]
 
   
 class UserPasswordUpdate(generics.UpdateAPIView):
-  queryset = User
+  queryset = User.objects.all()
   serializer_class = UserPasswordUpdate
   permission_classes = [IsAuthenticated, IsOwner]
   
