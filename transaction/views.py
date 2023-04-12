@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveDestroyAPIView, RetrieveAPIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import CartItem, TransactionItem, Transaction
 from .serializers import CartItemSerializer, CartSerializer, TransactionSerializer
 from .permissions import IsCartOwner, IsCartItemOwner
@@ -56,3 +56,8 @@ class TransactionCreate(CreateAPIView):
 
         serializer = self.serializer_class(transaction_instance, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+      
+class TransactionList(ListAPIView):
+  queryset = Transaction.objects.all()
+  permission_classes = [IsAuthenticated, IsAdminUser]
+  serializer_class = TransactionSerializer
