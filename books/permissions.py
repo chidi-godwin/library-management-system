@@ -12,4 +12,4 @@ class IsAdminOrReadOnly(permissions.BasePermission):
             return True
 
         # Only allow admins to create or update books
-        return request.user and request.user.is_authenticated and request.user.role == 'admin'
+        return request.user and request.user.is_authenticated and request.user.is_staff == True

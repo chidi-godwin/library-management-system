@@ -1,5 +1,6 @@
 from django.contrib.auth .models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from transaction.models import Cart
 
 
 class UserManager(BaseUserManager):
@@ -15,21 +16,17 @@ class UserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        return self.create_user(email, password, **extra_fields)
+        user = self.create_user(email, password, **extra_fields)
+        Cart.objects.create(user=user)
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    ROLES = (
-        ('admin', 'admin'),
-        ('student', 'student')
-    )
-
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
     phone_number = models.CharField(max_length=20, unique=True)
     dob = models.DateField()
-    role = models.CharField(max_length=10, choices=ROLES, default='student')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
